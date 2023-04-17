@@ -14,7 +14,7 @@ const server = http.createServer((req, res) => {
     timeout = queryObject.time;
   }
 
-
+  var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress || null;
 
   linkvars = ""
 
@@ -24,7 +24,7 @@ const server = http.createServer((req, res) => {
     }
   }
 
-  responseText = 'Hello Convox!\nI\'m: ' + process.env.APP + '\\' + process.env.SERVICE + '\nBuild:' + process.env.BUILD + '\nRelease: ' + process.env.RELEASE + '\nrunning on: ' + process.env.RACK + '\n and Instance: ' + process.env.INSTANCE_IP + '\n and timeout: ' + timeout + '\n and path: ' + path + '\n and query: ' + JSON.stringify(queryObject) + `\n\n\n\nLink variables: \n` + linkvars;
+  responseText = 'Hello World!\nI\'m: ' + process.env.APP + '\\' + process.env.SERVICE + '\nBuild:' + process.env.BUILD + '\nRelease: ' + process.env.RELEASE + '\nrunning on: ' + process.env.RACK + '\n and Instance: ' + process.env.INSTANCE_IP + '\n and timeout: ' + timeout + '\n and path: ' + path + '\n and query: ' + JSON.stringify(queryObject) + `\n\n\n\nIP: \n` + ip + `\n\n\n\nLink variables: \n` + linkvars + `\n\n\n\nHeaders: \n` + JSON.stringify(req.headers);
 
   if (path == '/failure') {
     statusCode = 500;

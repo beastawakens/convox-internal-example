@@ -1,60 +1,28 @@
-environment:
-  - PORT=8000
 services:
-  web:
-    # agent:
-    #   ports:
-    #     - 8125/udp
-    #     - 8126/tcp
-    annotations:
-      - eks.amazonaws.com/role-arn=arn:aws:iam::123456789012:role/eksctl-irptest-addon-iamsa-default-my-serviceaccount-Role1-UCGG6NDYZ3UE
-      - test.other.com/annotation=myothervalue
-      # - 'string.test.com/annotation={"host":"convox"}'
+  internal:
     command: node app.js
-    # domain: nodejs.softwarebalance.com,nodejs2.softwarebalance.com
+    internalRouter: true
     build: .
-    # timeout: 10
     environment:
       - "*"
-      # - SOMETHING=simplaseaseaeas
-      # - JAVA_OPTS=-XX:MaxRAMPercentage=70 -XX:MinRAMPercentage=50 -XX:InitialRAMPercentage=50
-    # health:
-    #   path: /
-    #   grace: 30
-    # volumes:
-    #   - /data
-    resources:
-      - shared_redis
-      - memcachier
-      - rack_cache
+      - PORT=8000
     port: 8000
     scale:
       count: 1
-      cpu: 256
+      cpu: 250
       memory: 256
-      # cooldown:
-      #   down: 180
-      #   up: 45
-      # targets:
-      #   cpu: 80
-      #   memory: 90
-# timers:
-#   cleanup:
-#     command: node app.js
-#     schedule: "*/2 * * * ? *"
-#     service: web
-resources:
-  # database:
-  #   type: postgres
-  shared_redis:
-    type: redis
-  memcachier:
-    type: memcached
-  rack_cache:
-    type: memcached
-#     options:
-#       encrypted: true
-#       version: 5.0.5
-#       class: cache.t2.micro
-#       durable: false
-
+    tls:
+      redirect: false
+  external:
+    command: node app.js
+    build: .
+    environment:
+      - "*"
+      - PORT=8000
+    port: 8000
+    scale:
+      count: 1
+      cpu: 250
+      memory: 256
+    # tls:
+    #   redirect: false
